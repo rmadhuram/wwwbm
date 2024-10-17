@@ -1,0 +1,88 @@
+.game :global {
+  display: flex;
+  flex-direction: column;
+  width: 1920px;
+  height: 1080px;
+  background-color: #f6f7ff;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 160px;
+    background-color: #dee9fe;
+    padding: 20px;
+    gap: 50px;
+    font-family: "Copperplate Gothic Std 29 BC";
+
+    .logo {
+      height: 120px;
+      padding-left: 50px;
+    }
+
+    .title-text {
+      padding: 20px;
+      flex-grow: 1;
+      align-self: center;
+      text-align: center;
+      font-size: 3.5rem;
+
+      .bible {
+        color: coral;
+      }
+    }
+
+    .name-level {
+      font-size: 2.5rem;
+    }
+
+    .timer {
+      font-size: 8rem;
+    }
+  }
+
+  .question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 480px;
+    margin: 20px;
+    border-radius: 10px;
+    background-color: #13106D;
+    color: #EDBF37;
+    //font-family: "Copperplate Gothic Std 29 BC";
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 20px;
+    
+    .answer {
+      background-color: #13106D;
+      color: #EDBF37;
+      //font-family: "Copperplate Gothic Std 29 BC";
+      font-family: "Lato", sans-serif;
+      font-weight: 400;
+      font-size: 3rem;
+      padding: 20px;
+      border-radius: 10px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #5F449E;
+        cursor: pointer;
+      }
+    }
+  }
+
+}

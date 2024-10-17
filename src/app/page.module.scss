@@ -1,0 +1,120 @@
+.home :global {
+  display: flex;
+  flex-direction: column;
+  width: 1920px;
+  height: 1080px;
+  background-color: #f6f7ff;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    height: 200px;
+    background-color: #dee9fe;
+    padding: 20px;
+
+    .logo {
+      height: 160px;
+      padding-left: 50px;
+    }
+
+    .title-text {
+      padding: 20px;
+      font-family: "Copperplate Gothic Std 29 BC";
+      flex-grow: 1;
+      align-self: center;
+      text-align: center;
+      font-size: 5.5rem;
+
+      .bible {
+        color: coral;
+      }
+    }
+  }
+
+  .title-1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 80px;
+    color: #f0ff60;
+    background-color: #588dd9;
+    border-bottom: 3px solid #666;
+    border-top: 3px solid #666;
+    padding: 20px;
+    font-family: "Copperplate Gothic Std 29 AB";
+
+    p {
+      font-size: 2.5rem;
+      position: relative; 
+      text-shadow: 0 0 10px #666;
+    }
+  }
+
+  .leaderboard-container {
+    display: flex;
+    flex-direction: row;
+    height: 600px;
+    background-color: #f6f7ff;
+    border-bottom: 1px dotted #666;
+
+    .kids-leaderboard {
+      flex-grow: 1;
+      border-right: 1px dotted #666;
+    }
+
+    .adults-leaderboard {
+      flex-grow: 1;
+    }
+  }
+
+  .leaderboard {
+    display: flex;
+    flex-direction: column;
+    font-family: "Copperplate Gothic Std 29 BC";
+
+    .leaderboard-title {
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 20px 50px;
+      background: #10436f;
+      color: white;
+
+      thead {
+        background-color: #262e33;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 10px;
+        font-size: 3rem;
+      }
+
+      tr {
+        border-top: 1px dotted #aaa;
+      }
+
+      tr:nth-child(even) {
+        background-color: #2f4c71;
+      }
+    
+      .num-correct, .total-seconds {
+        text-align: right;
+      }
+
+      .rank {
+        padding-left: 30px;
+      }
+
+      .total-seconds {
+        padding-right: 30px;
+      }
+    
+    }
+  }
+}
