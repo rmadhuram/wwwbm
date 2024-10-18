@@ -7,6 +7,8 @@ import type { Game } from "@/lib/model";
 import { useState } from "react";
 import QuestionDisplay from "./question-display/page";
 
+let timeoutId: number | null = null;
+
 function Title({ game, timer }: { game: Game | null, timer: number }) {
   return <div className="title">
     <img className="logo" src="/wwbam.png" alt="wwbam" />
@@ -27,15 +29,13 @@ export default function Game() {
   const [gameState, setGameState] = useState<Game | null>(null);
   const [timer, setTimer] = useState(60);
   let timerValue = 60;
-  let timeoutId: number | null = null;
 
   function initQuestion(gs: Game) {
     console.log('initQuestion', timeoutId);
     if (timeoutId) {
-      console.log('clearing timeout', timeoutId);
       window.clearTimeout(timeoutId);
+      timeoutId = null;
     }
-    timeoutId = null;
     setGameState(gs);
     timerValue = 60;
     setTimer(timerValue);
@@ -43,19 +43,21 @@ export default function Game() {
     function tick() {
       timerValue --;
       setTimer(timerValue);
-      console.log('tick', timerValue);
       if (timerValue > 0) {
         timeoutId = window.setTimeout(tick, 1000);
-        console.log('setting timeout', timeoutId);
       }
     }
     timeoutId = window.setTimeout(tick, 1000);
-    console.log('setting timeout', timeoutId);
   }
 
   useEffect(() => {
-    console.log('useEffect');
     initQuestion(getGame()!);
+    return () => {
+      // component unmounting
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    }
   }, []);
 
   if (!gameState) {
