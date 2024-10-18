@@ -35,53 +35,11 @@
 
     .name-level {
       font-size: 2.5rem;
+      flex-grow: 1;
     }
 
     .timer {
       font-size: 8rem;
-    }
-  }
-
-  .question {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 480px;
-    margin: 20px;
-    border-radius: 10px;
-    background-color: #13106D;
-    color: #EDBF37;
-    //font-family: "Copperplate Gothic Std 29 BC";
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 3rem;
-  }
-
-  .answers {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 0 20px;
-    
-    .answer {
-      background-color: #13106D;
-      color: #EDBF37;
-      //font-family: "Copperplate Gothic Std 29 BC";
-      font-family: "Lato", sans-serif;
-      font-weight: 400;
-      font-size: 3rem;
-      padding: 20px;
-      border-radius: 10px;
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &:hover {
-        background-color: #5F449E;
-        cursor: pointer;
-      }
     }
   }
 

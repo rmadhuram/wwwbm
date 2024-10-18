@@ -1,0 +1,49 @@
+.question-display :global {
+  display: flex;
+  flex-direction: column;
+
+  .question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 480px;
+    margin: 20px;
+    padding: 50px 80px;
+    border-radius: 10px;
+    background-color: #13106D;
+    color: #EDBF37;
+    font-family: "Copperplate Gothic Std 29 BC";
+    font-weight: 400;
+    font-size: 4rem;
+    border: 8px solid #aaa;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 20px;
+    
+    .answer {
+      background-color: #13106D;
+      color: #EDBF37;
+      font-family: "Copperplate Gothic Std 29 BC";
+      font-weight: 400;
+      font-size: 3rem;
+      line-height: 2.5rem;
+      padding: 20px;
+      border: 4px solid #aaa;
+      border-radius: 10px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #2d417c;
+        cursor: pointer;
+      }
+    }
+  }
+}
