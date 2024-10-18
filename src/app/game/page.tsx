@@ -1,14 +1,20 @@
-import styles from "./game.module.scss";
+'use client'
 
-function Title() {
+import styles from "./game.module.scss";
+import { useEffect } from "react";
+import { getGame } from "@/lib/game-service";
+import type { Game } from "@/lib/model";
+import { useState } from "react";
+import QuestionDisplay from "./question-display/page";
+function Title({ game }: { game: Game | null }) {
   return <div className="title">
     <img className="logo" src="/wwbam.png" alt="wwbam" />
     <div className="title-text">
       Who wants to be a <span className="bible">Bible</span> Millionaire?
     </div>
     <div className="name-level">
-      <p>JOHN DOE</p>
-      <p>Level 4</p>
+      <p>{game?.playerName}</p>
+      <p>Level {game?.gameLevel}</p>
     </div>
     <div className="timer">
       <p>27</p>
@@ -17,30 +23,26 @@ function Title() {
 }
 
 export default function Game() {
+  const [gameState, setGameState] = useState<Game | null>(null);
+  useEffect(() => {
+    setGameState(getGame());
+  }, []);
+
+  if (!gameState) {
+    return <div className={styles.game}>
+      <p>Loading...</p>
+    </div>
+  }
+
   return <div className={styles.game}>
-    <Title />
-    <div className="question">
-      <p>What gift did the wise men NOT bring to baby Jesus?
-        This is a test for a long question.
-        Hello this is a test for a long question.
-      </p>
-    </div>
-    <div className="answers">
-      <div className="answer">
-        <p>A: This is a test for a long answer.
-          This is a test for a long answer.
-          This is a test for a long answer.
-        </p>
-      </div>
-      <div className="answer">
-        <p>B: Myrrh</p>
-      </div>
-      <div className="answer">
-        <p>C: Frankincense</p>
-      </div>
-      <div className="answer">
-        <p>D: Silver</p>
-      </div>
-    </div>
+    <Title game={gameState} />
+    <QuestionDisplay game={gameState} callback={(correct) => {
+      console.log(correct);
+      if (correct) {
+        let newGameState = JSON.parse(JSON.stringify(gameState));
+        newGameState.gameLevel++;
+        setGameState(newGameState);
+      }
+    }} />
   </div>;
 }

@@ -1,5 +1,9 @@
-import Image from "next/image";
+'use client'
+
 import styles from "./page.module.scss";
+import { useRouter } from "next/navigation";
+import { startGame } from "@/lib/game-service";
+import { useState } from 'react';
 
 interface LeaderboardProps {
   title: string;
@@ -61,6 +65,24 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
 }
 
 export default function Home() {
+  const router = useRouter()
+  const [name, setName] = useState('');
+  const [type, setType] = useState('kid');
+
+  function start() {
+    // initialize game
+    startGame(name, type as 'kid' | 'adult');
+    router.push("/game");
+  }
+
+  function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setName(e.target.value);
+  }
+
+  function handleTypeChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setType(e.target.value);
+  }
+
   return (
     <div className={styles.home}>
       <div className="title">
@@ -79,6 +101,21 @@ export default function Home() {
         <div className="adults-leaderboard">
           <Leaderboard title={adultsLeaderboard.title} leaderboard={adultsLeaderboard.leaderboard} />
         </div>
+      </div>
+      <div className="start-game-container">
+        <p className="start-game-text">Test your Bible Knowledge! Win exciting prizes!</p>
+        <input type="text" placeholder="Name" onChange={handleNameChange} />
+        <div className="level-select">
+          <div className="level-select-item">
+            <input type="radio" id="kid" name="level" value="kid" onChange={handleTypeChange} />
+            <label htmlFor="kid">Child</label>
+          </div>
+          <div className="level-select-item">
+            <input type="radio" id="adult" name="level" value="adult" onChange={handleTypeChange} />
+            <label htmlFor="adult">Adult</label>
+          </div>
+        </div>
+        <button onClick={start}>Start Game</button>
       </div>
     </div>
   );
