@@ -22,11 +22,7 @@ export default function QuestionDisplay({
       </div>
       <div className="answers">
         {currentQuestion.options.map((option, index) => (
-          <div
-            className="answer"
-            key={index}
-            onClick={() => handleAnswer(index)}
-          >
+          <div className="answer"key={index} onClick={() => handleAnswer(index)}>
             <p>
               {String.fromCharCode(65 + index)}: {option}
             </p>
