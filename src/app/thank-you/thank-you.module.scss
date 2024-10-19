@@ -1,0 +1,22 @@
+.thank-you :global {
+  display: flex;
+  flex-direction: column;
+  width: 1920px;
+  height: 1080px;
+  background-color: #13106D;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  font-family: "Copperplate Gothic Std 29 BC";
+
+  h1 {
+    font-size: 4rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+  }
+}
+
+
