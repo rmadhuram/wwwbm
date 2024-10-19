@@ -15,6 +15,7 @@ export type Game = {
   questions: Question[];
   maxCompletedLevel: number;
   totalTime: number;
+  totalHighResTime: number;
 }
 
 export type QuestionBase = {
