@@ -29,10 +29,25 @@ export type LeaderBoardEntry = {
   time: number; // high res time in ms
 }
 
-export type LeaderBoard = LeaderBoardEntry[];
-
 export type LeaderBoards = {
-  kid: LeaderBoard;
-  adult: LeaderBoard;
+  kid: LeaderBoardEntry[];
+  adult: LeaderBoardEntry[];
+}
+
+export const INITIAL_LEADERBOARD:LeaderBoards = {
+  kid: [
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+  ],
+  adult: [
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+    {name: '---', score: 0, time: 0},
+  ]
 }
 
