@@ -22,3 +22,17 @@ export type QuestionBase = {
   kidsQuestions: Question[][];
   adultQuestions: Question[][];
 }
+
+export type LeaderBoardEntry = {
+  name: string;
+  score: number;
+  time: number; // high res time in ms
+}
+
+export type LeaderBoard = LeaderBoardEntry[];
+
+export type LeaderBoards = {
+  kid: LeaderBoard;
+  adult: LeaderBoard;
+}
+
