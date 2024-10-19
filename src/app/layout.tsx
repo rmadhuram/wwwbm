@@ -21,6 +21,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <audio id="bg-music" src="/sounds/main.mp3" autoPlay/>
       </body>
     </html>
   );
