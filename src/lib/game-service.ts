@@ -11,7 +11,7 @@ export function startGame(name: string, type: 'kid' | 'adult') {
     playerName: name,
     playerLevel: type,
     questions: questions,
-    gameLevel: 0,
+    gameLevel: 1,
     maxCompletedLevel: 0,
     totalTime: 0,
   }
