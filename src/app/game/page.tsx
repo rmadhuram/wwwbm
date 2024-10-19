@@ -79,7 +79,6 @@ export default function Game() {
         let newGameState = promoteNextLevel(60 - timerValue, timeTaken);
         console.log('newGameState', newGameState);
         initQuestion(newGameState);
-
       }
     }} />
   </div>;
