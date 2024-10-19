@@ -67,7 +67,7 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
 export default function Home() {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [type, setType] = useState("kid");
+  const [type, setType] = useState("");
 
   function start() {
     // initialize game

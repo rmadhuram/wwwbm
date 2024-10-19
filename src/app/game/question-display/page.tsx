@@ -1,6 +1,7 @@
 import styles from "./question-display.module.scss";
 import { Game } from "../../../lib/model";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function QuestionDisplay({
   game,
@@ -13,18 +14,23 @@ export default function QuestionDisplay({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
 
-  const handleAnswer = (index: number) => {
-    console.log(index);
-    setSelectedAnswer(index);
-    const isCorrect = index == currentQuestion.correct;
+  const router = useRouter();
 
+  const handleAnswer = (index: number) => {
+    setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.correct);
 
-    setTimeout(() => {
-      setSelectedAnswer(null);
-      setCorrectAnswer(null);
-      callback(isCorrect);
-    }, 2000);
+    const isCorrect = index == currentQuestion.correct;
+
+    if (!isCorrect || game.gameLevel === 5) {
+      router.push("/thank-you");
+    } else {
+      setTimeout(() => {
+        setSelectedAnswer(null);
+        setCorrectAnswer(null);
+        callback(isCorrect);
+      }, 2000);
+    }
   };
 
   const assignClassName = (index: number) => {
