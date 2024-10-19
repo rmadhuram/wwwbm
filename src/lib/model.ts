@@ -1,4 +1,6 @@
+
 export type Question = {
+  level: number;
   id: string;
   question: string;
   options: string[];
