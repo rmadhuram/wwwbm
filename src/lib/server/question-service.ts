@@ -24,25 +24,6 @@ function fisherYatesShuffle<T>(array: T[]): T[] {
   return array;
 }
 
-// Function to sort questions by level
-function sortQuestionsByLevel(questions: QuestionBase): QuestionBase {
-  // Sort kids' questions by levels
-  if (questions.kidsQuestions && questions.kidsQuestions.length) {
-    questions.kidsQuestions = questions.kidsQuestions.map(levelQuestions => {
-      return levelQuestions.sort((a, b) => a.level - b.level); 
-    });
-  }
-
-  // Sort adult questions by levels
-  if (questions.adultQuestions && questions.adultQuestions.length) {
-    questions.adultQuestions = questions.adultQuestions.map(levelQuestions => {
-      return levelQuestions.sort((a, b) => a.level - b.level); 
-    });
-  }
-
-  return questions;
-}
-
 function shuffleQuestions(questions: QuestionBase): QuestionBase {
   // Shuffle kids' questions
   if (questions.kidsQuestions && questions.kidsQuestions.length) {
@@ -70,9 +51,6 @@ export async function getQuestions(): Promise<QuestionBase> {
   let kidsQuestions = await loadQuestions('q-kids.json');
   let adultQuestions = await loadQuestions('q-adults.json');
   let questions = { kidsQuestions, adultQuestions };
-
-  // Sort questions by level
-  questions = sortQuestionsByLevel(questions);
 
   // Shuffle questions after sorting
   questions = shuffleQuestions(questions);
