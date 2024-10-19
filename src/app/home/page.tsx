@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
 import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { startGame } from "@/lib/client/game-service";
-import { useState } from 'react';
+import { useState } from "react";
 
 interface LeaderboardProps {
   title: string;
@@ -14,7 +14,7 @@ interface LeaderboardProps {
   }[];
 }
 
-const kidsLeaderboard:LeaderboardProps = {
+const kidsLeaderboard: LeaderboardProps = {
   title: "KIDS",
   leaderboard: [
     { name: "John Doe", numCorrect: 5, totalSeconds: 257 },
@@ -25,7 +25,7 @@ const kidsLeaderboard:LeaderboardProps = {
   ],
 };
 
-const adultsLeaderboard:LeaderboardProps = {
+const adultsLeaderboard: LeaderboardProps = {
   title: "ADULTS",
   leaderboard: [
     { name: "John Doe", numCorrect: 5, totalSeconds: 201 },
@@ -65,13 +65,13 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
 }
 
 export default function Home() {
-  const router = useRouter()
-  const [name, setName] = useState('');
-  const [type, setType] = useState('kid');
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [type, setType] = useState("kid");
 
   function start() {
     // initialize game
-    startGame(name, type as 'kid' | 'adult');
+    startGame(name, type as "kid" | "adult");
     router.push("/game");
   }
 
@@ -96,26 +96,48 @@ export default function Home() {
       </div>
       <div className="leaderboard-container">
         <div className="kids-leaderboard">
-          <Leaderboard title={kidsLeaderboard.title} leaderboard={kidsLeaderboard.leaderboard} />
+          <Leaderboard
+            title={kidsLeaderboard.title}
+            leaderboard={kidsLeaderboard.leaderboard}
+          />
         </div>
         <div className="adults-leaderboard">
-          <Leaderboard title={adultsLeaderboard.title} leaderboard={adultsLeaderboard.leaderboard} />
+          <Leaderboard
+            title={adultsLeaderboard.title}
+            leaderboard={adultsLeaderboard.leaderboard}
+          />
         </div>
       </div>
       <div className="start-game-container">
-        <p className="start-game-text">Test your Bible Knowledge! Win exciting prizes!</p>
+        <p className="start-game-text">
+          Test your Bible Knowledge! Win exciting prizes!
+        </p>
         <input type="text" placeholder="Name" onChange={handleNameChange} />
         <div className="level-select">
           <div className="level-select-item">
-            <input type="radio" id="kid" name="level" value="kid" onChange={handleTypeChange} />
+            <input
+              type="radio"
+              id="kid"
+              name="level"
+              value="kid"
+              onChange={handleTypeChange}
+            />
             <label htmlFor="kid">Child</label>
           </div>
           <div className="level-select-item">
-            <input type="radio" id="adult" name="level" value="adult" onChange={handleTypeChange} />
+            <input
+              type="radio"
+              id="adult"
+              name="level"
+              value="adult"
+              onChange={handleTypeChange}
+            />
             <label htmlFor="adult">Adult</label>
           </div>
         </div>
-        <button onClick={start}>Start Game</button>
+        <button onClick={start} disabled={!name || !type} >
+          Start Game
+        </button>
       </div>
     </div>
   );

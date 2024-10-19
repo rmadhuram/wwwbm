@@ -24,7 +24,7 @@ export default function QuestionDisplay({
       setSelectedAnswer(null);
       setCorrectAnswer(null);
       callback(isCorrect);
-    }, 3000);
+    }, 2000);
   };
 
   const assignClassName = (index: number) => {
