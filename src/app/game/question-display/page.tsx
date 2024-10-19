@@ -6,7 +6,7 @@ export default function QuestionDisplay({ game, callback }: { game: Game, callba
 
   const handleAnswer = (index: number) => {
     console.log(index);
-    callback(index == currentQuestion.correctAnswer);
+    callback(index == currentQuestion.correct);
   }
 
   return <div className={styles['question-display']}>
@@ -14,9 +14,9 @@ export default function QuestionDisplay({ game, callback }: { game: Game, callba
       <p>{currentQuestion.question}</p>
     </div>
     <div className="answers">
-      {currentQuestion.answers.map((answer, index) => (
+      {currentQuestion.options.map((option, index) => (
         <div className="answer" key={index} onClick={() => handleAnswer(index)}>
-          <p>{String.fromCharCode(65 + index)}: {answer}</p>
+          <p>{String.fromCharCode(65 + index)}: {option}</p>
         </div>
       ))} 
     </div>
