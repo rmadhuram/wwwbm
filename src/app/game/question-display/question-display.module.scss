@@ -11,8 +11,8 @@
     margin: 20px;
     padding: 50px 80px;
     border-radius: 10px;
-    background-color: #13106D;
-    color: #EDBF37;
+    background-color: #13106d;
+    color: #edbf37;
     font-family: "Copperplate Gothic Std 29 BC";
     font-weight: 400;
     font-size: 4rem;
@@ -24,10 +24,10 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     padding: 0 20px;
-    
+
     .answer {
-      background-color: #13106D;
-      color: #EDBF37;
+      background-color: #13106d;
+      color: #edbf37;
       font-family: "Copperplate Gothic Std 29 BC";
       font-weight: 400;
       font-size: 3rem;
@@ -43,6 +43,18 @@
       &:hover {
         background-color: #2d417c;
         cursor: pointer;
+      }
+
+      &.correct {
+        background-color: green;
+      }
+
+      &.incorrect {
+        background-color: red;
+      }
+
+      &.default {
+        background-color: #13106d;
       }
     }
   }
