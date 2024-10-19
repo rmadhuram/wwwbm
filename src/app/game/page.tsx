@@ -2,12 +2,14 @@
 
 import styles from "./game.module.scss";
 import { useEffect } from "react";
-import { getGame } from "@/lib/client/game-service";
+import { getGame, promoteNextLevel } from "@/lib/client/game-service";
 import type { Game } from "@/lib/model";
 import { useState } from "react";
 import QuestionDisplay from "./question-display/page";
 
 let timeoutId: number | null = null;
+let timerValue = 60;
+let startTime: number = 0;
 
 function Title({ game, timer }: { game: Game | null, timer: number }) {
   return <div className="title">
@@ -28,16 +30,18 @@ function Title({ game, timer }: { game: Game | null, timer: number }) {
 export default function Game() {
   const [gameState, setGameState] = useState<Game | null>(null);
   const [timer, setTimer] = useState(60);
-  let timerValue = 60;
 
+  /** 
+   * Initialize the question and start the timer
+   */ 
   function initQuestion(gs: Game) {
-    console.log('initQuestion', timeoutId);
     if (timeoutId) {
       window.clearTimeout(timeoutId);
       timeoutId = null;
     }
     setGameState(gs);
     timerValue = 60;
+    startTime = Date.now();
     setTimer(timerValue);
 
     function tick() {
@@ -71,9 +75,11 @@ export default function Game() {
     <QuestionDisplay game={gameState} callback={(correct) => {
       console.log(correct);
       if (correct) {
-        let newGameState = JSON.parse(JSON.stringify(gameState));
-        newGameState.gameLevel++;
+        let timeTaken = Date.now() - startTime;
+        let newGameState = promoteNextLevel(60 - timerValue, timeTaken);
+        console.log('newGameState', newGameState);
         initQuestion(newGameState);
+
       }
     }} />
   </div>;
