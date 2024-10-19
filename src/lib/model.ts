@@ -1,8 +1,10 @@
 export type Question = {
   id: string;
   question: string;
-  answers: string[];
-  correctAnswer: number;
+  options: string[];
+  correct: number;
+  reference?: string;
+  fact?: string;
 }
 
 export type Game = {
@@ -15,3 +17,7 @@ export type Game = {
   totalTime: number;
 }
 
+export type QuestionBase = {
+  kidsQuestions: Question[][];
+  adultQuestions: Question[][];
+}

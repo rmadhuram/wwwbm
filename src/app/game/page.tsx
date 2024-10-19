@@ -2,7 +2,7 @@
 
 import styles from "./game.module.scss";
 import { useEffect } from "react";
-import { getGame } from "@/lib/game-service";
+import { getGame } from "@/lib/client/game-service";
 import type { Game } from "@/lib/model";
 import { useState } from "react";
 import QuestionDisplay from "./question-display/page";
@@ -20,7 +20,7 @@ function Title({ game, timer }: { game: Game | null, timer: number }) {
       <p>Level {game?.gameLevel}</p>
     </div>
     <div className="timer">
-      <p>{timer}</p>
+      <p>{timer < 10 ? '0' + timer : timer}</p>
     </div>
   </div>
 }
