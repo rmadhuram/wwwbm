@@ -55,10 +55,6 @@ export default function Game() {
       if (timerValue > 0) {
         timeoutId = window.setTimeout(tick, 1000);
       }
-
-      if (timerValue === 0) {
-        router.push("/thank-you");
-      }
     }
     timeoutId = window.setTimeout(tick, 1000);
   }
@@ -85,6 +81,7 @@ export default function Game() {
     <div className={styles.game}>
       <Title game={gameState} timer={timer} />
       <QuestionDisplay
+        timer={timer}
         game={gameState}
         callback={(correct) => {
           console.log(correct);

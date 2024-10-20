@@ -4,6 +4,7 @@ import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { startGame } from "@/lib/client/game-service";
 import { useState } from "react";
+import { useEffect } from "react";
 
 interface LeaderboardProps {
   title: string;
@@ -13,28 +14,6 @@ interface LeaderboardProps {
     totalSeconds: number;
   }[];
 }
-
-const kidsLeaderboard: LeaderboardProps = {
-  title: "KIDS",
-  leaderboard: [
-    { name: "John Doe", numCorrect: 5, totalSeconds: 257 },
-    { name: "Jane Doe", numCorrect: 5, totalSeconds: 276 },
-    { name: "John Smith", numCorrect: 4, totalSeconds: 213 },
-    { name: "John Doe", numCorrect: 3, totalSeconds: 110 },
-    { name: "Jane Doe", numCorrect: 2, totalSeconds: 30 },
-  ],
-};
-
-const adultsLeaderboard: LeaderboardProps = {
-  title: "ADULTS",
-  leaderboard: [
-    { name: "John Doe", numCorrect: 5, totalSeconds: 201 },
-    { name: "Jane Doe", numCorrect: 5, totalSeconds: 248 },
-    { name: "John Smith", numCorrect: 5, totalSeconds: 290 },
-    { name: "John Doe", numCorrect: 4, totalSeconds: 170 },
-    { name: "Jane Doe", numCorrect: 3, totalSeconds: 35 },
-  ],
-};
 
 function Leaderboard({ title, leaderboard }: LeaderboardProps) {
   return (
@@ -68,6 +47,10 @@ export default function Home() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [type, setType] = useState("");
+  const [leaderboard, setLeaderBoard] = useState<{
+    kids: LeaderboardProps;
+    adults: LeaderboardProps;
+  } | null>(null);
 
   function start() {
     // initialize game
@@ -83,6 +66,43 @@ export default function Home() {
     setType(e.target.value);
   }
 
+  useEffect(() => {
+    fetchLeaderBoard();
+  }, []);
+
+  const fetchLeaderBoard = async () => {
+    try {
+      const response = await fetch("/api/leaderboard");
+      if (!response.ok) {
+        throw new Error(`Error : ${response.status}`);
+      }
+
+      const fetchedLeaderBoard = await response.json();
+
+      const kidsLeaderboard: LeaderboardProps = {
+        title: "KIDS",
+        leaderboard: fetchedLeaderBoard.kid.map((entry: any) => ({
+          name: entry.name,
+          numCorrect: entry.score,
+          totalSeconds: entry.time,
+        })),
+      };
+
+      const adultsLeaderboard: LeaderboardProps = {
+        title: "ADULTS",
+        leaderboard: fetchedLeaderBoard.adult.map((entry: any) => ({
+          name: entry.name,
+          numCorrect: entry.score,
+          totalSeconds: entry.time,
+        })),
+      };
+
+      setLeaderBoard({ kids: kidsLeaderboard, adults: adultsLeaderboard });
+    } catch (error) {
+      console.log("Error fetching the leader: error");
+    }
+  };
+
   return (
     <div className={styles.home}>
       <div className="title">
@@ -97,14 +117,14 @@ export default function Home() {
       <div className="leaderboard-container">
         <div className="kids-leaderboard">
           <Leaderboard
-            title={kidsLeaderboard.title}
-            leaderboard={kidsLeaderboard.leaderboard}
+            title={leaderboard?.kids.title || "KIDS"}
+            leaderboard={leaderboard?.kids.leaderboard || []}
           />
         </div>
         <div className="adults-leaderboard">
           <Leaderboard
-            title={adultsLeaderboard.title}
-            leaderboard={adultsLeaderboard.leaderboard}
+            title={leaderboard?.adults.title || "ADULTS"}
+            leaderboard={leaderboard?.adults.leaderboard || []}
           />
         </div>
       </div>
@@ -135,7 +155,7 @@ export default function Home() {
             <label htmlFor="adult">Adult</label>
           </div>
         </div>
-        <button onClick={start} disabled={!name || !type} >
+        <button onClick={start} disabled={!name || !type}>
           Start Game
         </button>
       </div>

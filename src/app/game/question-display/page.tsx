@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function QuestionDisplay({
+  timer,
   game,
   callback,
 }: {
+  timer: number;
   game: Game;
   callback: (correct: boolean) => void;
 }) {
@@ -22,8 +24,15 @@ export default function QuestionDisplay({
 
     const isCorrect = index == currentQuestion.correct;
 
-    if (!isCorrect || game.gameLevel === 5) {
-      router.push("/thank-you");
+    const name = game.playerName;
+    const score = game.maxCompletedLevel;
+    const time = game.totalHighResTime;
+    const level = game.playerLevel;
+
+    if (!isCorrect || game.gameLevel === 5 || timer === 0) {
+      router.push(
+        `/thank-you?name=${name}&score=${score}&time=${time}&level=${level}`
+      );
     } else {
       setTimeout(() => {
         setSelectedAnswer(null);
