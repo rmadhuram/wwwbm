@@ -4,7 +4,6 @@ import fs from "fs";
 import { INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
 
 const leaderboardPath = path.join(process.cwd(), "data", "leaderboard.json");
-console.log(leaderboardPath);
 
 function fetchLeaderBoard(): LeaderBoards {
   try {
@@ -16,7 +15,6 @@ function fetchLeaderBoard(): LeaderBoards {
 }
 
 function saveLeaderBoard(leaderboard: LeaderBoards) {
-  console.log("in save");
   fs.writeFileSync(leaderboardPath, JSON.stringify(leaderboard, null, 2));
 }
 
@@ -44,7 +42,7 @@ export async function POST(request: Request) {
     [level]: [
       { name, score, time },
       ...leaderboard[level as keyof LeaderBoards].slice(0, 4),
-    ].sort((a, b) => b.score - a.score || a.time - b.time),
+    ].sort((a, b) => b.score - a.score || a.time - b.time), //Highest Score and Lowest time incase of tie
   };
 
   saveLeaderBoard(updatedLeaderboard);

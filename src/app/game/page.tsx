@@ -86,6 +86,7 @@ export default function Game() {
         callback={(correct) => {
           console.log(correct);
           if (correct) {
+            gameState.maxCompletedLevel++;
             let timeTaken = Date.now() - startTime;
             let newGameState = promoteNextLevel(60 - timerValue, timeTaken);
             console.log("newGameState", newGameState);

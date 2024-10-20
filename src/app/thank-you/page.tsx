@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import styles from "./thank-you.module.scss";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ThankYou() {
   const searchParams = useSearchParams();
@@ -12,8 +13,13 @@ export default function ThankYou() {
   const time = searchParams.get("time");
   const level = searchParams.get("level");
 
+  const router = useRouter();
+
   useEffect(() => {
     updateLeaderBoard();
+    setTimeout(() => {
+      router.push("/home");
+    }, 3000);
   });
 
   const updateLeaderBoard = async () => {

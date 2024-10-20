@@ -18,16 +18,22 @@ export default function QuestionDisplay({
 
   const router = useRouter();
 
+  const name = game.playerName;
+  const score = game.maxCompletedLevel + 1;
+  const time = Math.round(game.totalHighResTime / 1000);
+  const level = game.playerLevel;
+
+  if (timer === 0) {
+    router.push(
+      `/thank-you?name=${name}&score=${score}&time=${time}&level=${level}`
+    );
+  }
+
   const handleAnswer = (index: number) => {
     setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.correct);
 
     const isCorrect = index == currentQuestion.correct;
-
-    const name = game.playerName;
-    const score = game.maxCompletedLevel;
-    const time = game.totalHighResTime;
-    const level = game.playerLevel;
 
     if (!isCorrect || game.gameLevel === 5 || timer === 0) {
       router.push(
