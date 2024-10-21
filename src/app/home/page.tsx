@@ -1,40 +1,15 @@
-'use client'
+"use client";
 
 import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { startGame } from "@/lib/client/game-service";
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import { LeaderBoardEntry, LeaderBoards } from "@/lib/model";
 
 interface LeaderboardProps {
   title: string;
-  leaderboard: {
-    name: string;
-    numCorrect: number;
-    totalSeconds: number;
-  }[];
+  leaderboard: LeaderBoardEntry[];
 }
-
-const kidsLeaderboard:LeaderboardProps = {
-  title: "KIDS",
-  leaderboard: [
-    { name: "John Doe", numCorrect: 5, totalSeconds: 257 },
-    { name: "Jane Doe", numCorrect: 5, totalSeconds: 276 },
-    { name: "John Smith", numCorrect: 4, totalSeconds: 213 },
-    { name: "John Doe", numCorrect: 3, totalSeconds: 110 },
-    { name: "Jane Doe", numCorrect: 2, totalSeconds: 30 },
-  ],
-};
-
-const adultsLeaderboard:LeaderboardProps = {
-  title: "ADULTS",
-  leaderboard: [
-    { name: "John Doe", numCorrect: 5, totalSeconds: 201 },
-    { name: "Jane Doe", numCorrect: 5, totalSeconds: 248 },
-    { name: "John Smith", numCorrect: 5, totalSeconds: 290 },
-    { name: "John Doe", numCorrect: 4, totalSeconds: 170 },
-    { name: "Jane Doe", numCorrect: 3, totalSeconds: 35 },
-  ],
-};
 
 function Leaderboard({ title, leaderboard }: LeaderboardProps) {
   return (
@@ -54,8 +29,8 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
             <tr key={index}>
               <td className="rank">{index + 1}</td>
               <td className="name">{item.name}</td>
-              <td className="num-correct">{item.numCorrect}</td>
-              <td className="total-seconds">{item.totalSeconds}</td>
+              <td className="num-correct">{item.completedLevels}</td>
+              <td className="total-seconds">{Math.round(item.time)}</td>
             </tr>
           ))}
         </tbody>
@@ -65,13 +40,14 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
 }
 
 export default function Home() {
-  const router = useRouter()
-  const [name, setName] = useState('');
-  const [type, setType] = useState('kid');
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [leaderboard, setLeaderBoard] = useState<LeaderBoards | null>(null);
 
   function start() {
-    // initialize game
-    startGame(name, type as 'kid' | 'adult');
+    // Initialize game
+    startGame(name, type as "kid" | "adult");
     router.push("/game");
   }
 
@@ -82,6 +58,25 @@ export default function Home() {
   function handleTypeChange(e: React.ChangeEvent<HTMLInputElement>) {
     setType(e.target.value);
   }
+
+  useEffect(() => {
+    fetchLeaderBoard();
+  }, []);
+
+  const fetchLeaderBoard = async () => {
+    try {
+      const response = await fetch("/api/leaderboard");
+      if (!response.ok) {
+        throw new Error(`Error : ${response.status}`);
+      }
+
+      const fetchedLeaderBoard: LeaderBoards = await response.json();
+
+      setLeaderBoard(fetchedLeaderBoard);
+    } catch (error) {
+      console.log("Error fetching the leaderboard:", error);
+    }
+  };
 
   return (
     <div className={styles.home}>
@@ -96,26 +91,42 @@ export default function Home() {
       </div>
       <div className="leaderboard-container">
         <div className="kids-leaderboard">
-          <Leaderboard title={kidsLeaderboard.title} leaderboard={kidsLeaderboard.leaderboard} />
+          <Leaderboard title="KIDS" leaderboard={leaderboard?.kid || []} />
         </div>
         <div className="adults-leaderboard">
-          <Leaderboard title={adultsLeaderboard.title} leaderboard={adultsLeaderboard.leaderboard} />
+          <Leaderboard title="ADULTS" leaderboard={leaderboard?.adult || []} />
         </div>
       </div>
       <div className="start-game-container">
-        <p className="start-game-text">Test your Bible Knowledge! Win exciting prizes!</p>
+        <p className="start-game-text">
+          Test your Bible Knowledge! Win exciting prizes!
+        </p>
         <input type="text" placeholder="Name" onChange={handleNameChange} />
         <div className="level-select">
           <div className="level-select-item">
-            <input type="radio" id="kid" name="level" value="kid" onChange={handleTypeChange} />
+            <input
+              type="radio"
+              id="kid"
+              name="level"
+              value="kid"
+              onChange={handleTypeChange}
+            />
             <label htmlFor="kid">Child</label>
           </div>
           <div className="level-select-item">
-            <input type="radio" id="adult" name="level" value="adult" onChange={handleTypeChange} />
+            <input
+              type="radio"
+              id="adult"
+              name="level"
+              value="adult"
+              onChange={handleTypeChange}
+            />
             <label htmlFor="adult">Adult</label>
           </div>
         </div>
-        <button onClick={start}>Start Game</button>
+        <button onClick={start} disabled={!name || !type}>
+          Start Game
+        </button>
       </div>
     </div>
   );

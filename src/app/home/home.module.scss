@@ -45,7 +45,7 @@
 
     p {
       font-size: 2.5rem;
-      position: relative; 
+      position: relative;
       text-shadow: 0 0 10px #666;
     }
   }
@@ -90,7 +90,8 @@
         background-color: #262e33;
       }
 
-      th, td {
+      th,
+      td {
         text-align: left;
         padding: 10px;
         font-size: 3rem;
@@ -103,8 +104,9 @@
       tr:nth-child(even) {
         background-color: #2f4c71;
       }
-    
-      .num-correct, .total-seconds {
+
+      .num-correct,
+      .total-seconds {
         text-align: right;
       }
 
@@ -115,7 +117,6 @@
       .total-seconds {
         padding-right: 30px;
       }
-    
     }
   }
 
@@ -134,7 +135,8 @@
       flex-grow: 1;
     }
 
-    input, select {
+    input,
+    select {
       font-family: "Copperplate Gothic Std 29 BC";
       font-size: 3rem;
     }
@@ -161,6 +163,7 @@
       margin: 0 10px;
       width: 30px;
       height: 30px;
+      cursor: pointer;
     }
 
     button {
@@ -171,6 +174,7 @@
       color: white;
       border: none;
       border-radius: 10px;
+      cursor: pointer;
     }
   }
 }
