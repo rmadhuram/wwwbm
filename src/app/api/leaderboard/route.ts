@@ -1,22 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
-
-const leaderboardPath = path.join(process.cwd(), "data", "leaderboard.json");
-
-function fetchLeaderBoard(): LeaderBoards {
-  try {
-    const data = fs.readFileSync(leaderboardPath, "utf-8");
-    return JSON.parse(data) as LeaderBoards;
-  } catch (error) {
-    return INITIAL_LEADERBOARD;
-  }
-}
-
-function saveLeaderBoard(leaderboard: LeaderBoards) {
-  fs.writeFileSync(leaderboardPath, JSON.stringify(leaderboard, null, 2));
-}
+import { NextResponse } from "next/server";
+import { LeaderBoards } from "@/lib/model";
+import { fetchLeaderBoard, saveLeaderBoard } from "@/lib/server/game-service";
 
 export async function GET(request: Request) {
   try {
@@ -29,9 +13,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { name, score, time, level } = await request.json();
+  const { name, completedLevels, time, level } = await request.json();
 
   const leaderboard = fetchLeaderBoard();
+  console.log(typeof leaderboard, typeof level);
 
   if (!(level in leaderboard)) {
     return NextResponse.json({ error: "Invalid level" }, { status: 400 });
@@ -40,9 +25,9 @@ export async function POST(request: Request) {
   const updatedLeaderboard = {
     ...leaderboard,
     [level]: [
-      { name, score, time },
+      { name, completedLevels, time },
       ...leaderboard[level as keyof LeaderBoards].slice(0, 4),
-    ].sort((a, b) => b.score - a.score || a.time - b.time), //Highest Score and Lowest time incase of tie
+    ].sort((a, b) => b.completedLevels - a.completedLevels || a.time - b.time), //Highest Score and Lowest time incase of tie
   };
 
   saveLeaderBoard(updatedLeaderboard);

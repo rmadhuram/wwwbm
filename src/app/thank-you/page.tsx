@@ -9,7 +9,7 @@ export default function ThankYou() {
   const searchParams = useSearchParams();
 
   const name = searchParams.get("name");
-  const score = searchParams.get("score");
+  const completedLevels = searchParams.get("completedLevels");
   const time = searchParams.get("time");
   const level = searchParams.get("level");
 
@@ -28,7 +28,7 @@ export default function ThankYou() {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ name, score, time, level }),
+      body: JSON.stringify({ name, completedLevels, time, level }),
     });
   };
 

@@ -25,7 +25,7 @@ export type QuestionBase = {
 
 export type LeaderBoardEntry = {
   name: string;
-  score: number;
+  completedLevels: number;
   time: number; // high res time in ms
   level?: "kid" | "adult";
 };
@@ -37,17 +37,17 @@ export type LeaderBoards = {
 
 export const INITIAL_LEADERBOARD: LeaderBoards = {
   kid: [
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
   ],
   adult: [
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
-    { name: "---", score: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
+    { name: "---", completedLevels: 0, time: 0 },
   ],
 };

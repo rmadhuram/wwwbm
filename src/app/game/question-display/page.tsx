@@ -19,13 +19,13 @@ export default function QuestionDisplay({
   const router = useRouter();
 
   const name = game.playerName;
-  const score = game.maxCompletedLevel + 1;
-  const time = Math.round(game.totalHighResTime / 1000);
+  const completedLevels = game.maxCompletedLevel + 1;
+  const time = game.totalHighResTime / 1000;
   const level = game.playerLevel;
 
   if (timer === 0) {
     router.push(
-      `/thank-you?name=${name}&score=${score}&time=${time}&level=${level}`
+      `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
     );
   }
 
@@ -37,7 +37,7 @@ export default function QuestionDisplay({
 
     if (!isCorrect || game.gameLevel === 5 || timer === 0) {
       router.push(
-        `/thank-you?name=${name}&score=${score}&time=${time}&level=${level}`
+        `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
       );
     } else {
       setTimeout(() => {

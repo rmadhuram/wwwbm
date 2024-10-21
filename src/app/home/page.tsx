@@ -34,7 +34,7 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
               <td className="rank">{index + 1}</td>
               <td className="name">{item.name}</td>
               <td className="num-correct">{item.numCorrect}</td>
-              <td className="total-seconds">{item.totalSeconds}</td>
+              <td className="total-seconds">{Math.round(item.totalSeconds)}</td>
             </tr>
           ))}
         </tbody>
@@ -83,7 +83,7 @@ export default function Home() {
         title: "KIDS",
         leaderboard: fetchedLeaderBoard.kid.map((entry: any) => ({
           name: entry.name,
-          numCorrect: entry.score,
+          numCorrect: entry.completedLevels,
           totalSeconds: entry.time,
         })),
       };
@@ -92,7 +92,7 @@ export default function Home() {
         title: "ADULTS",
         leaderboard: fetchedLeaderBoard.adult.map((entry: any) => ({
           name: entry.name,
-          numCorrect: entry.score,
+          numCorrect: entry.completedLevels,
           totalSeconds: entry.time,
         })),
       };
