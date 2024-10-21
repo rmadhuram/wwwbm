@@ -19,7 +19,7 @@ export default function QuestionDisplay({
   const router = useRouter();
 
   const name = game.playerName;
-  const completedLevels = game.maxCompletedLevel + 1;
+  const completedLevels = game.maxCompletedLevel;
   const time = game.totalHighResTime / 1000;
   const level = game.playerLevel;
 
@@ -35,7 +35,7 @@ export default function QuestionDisplay({
 
     const isCorrect = index == currentQuestion.correct;
 
-    if (!isCorrect || game.gameLevel === 5 || timer === 0) {
+    if (!isCorrect || game.gameLevel === 5) {
       router.push(
         `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
       );
