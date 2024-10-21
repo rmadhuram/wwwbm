@@ -29,7 +29,11 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
             <tr key={index}>
               <td className="rank">{index + 1}</td>
               <td className="name">{item.name}</td>
-              <td className="num-correct">{item.completedLevels}</td>
+              <td className="num-correct">
+                {item.completedLevels === 0
+                  ? 0
+                  : Number(item.completedLevels) + 1}
+              </td>
               <td className="total-seconds">{Math.round(item.time)}</td>
             </tr>
           ))}

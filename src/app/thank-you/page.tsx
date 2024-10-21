@@ -20,16 +20,22 @@ export default function ThankYou() {
     setTimeout(() => {
       router.push("/home");
     }, 3000);
-  });
+  }, []);
 
   const updateLeaderBoard = async () => {
-    const response = await fetch("/api/leaderboard", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ name, completedLevels, time, level }),
-    });
+    if (completedLevels === "0") {
+      setTimeout(() => {
+        router.push("/home");
+      }, 3000);
+    } else {
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ name, completedLevels, time, level }),
+      });
+    }
   };
 
   return (
