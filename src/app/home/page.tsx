@@ -3,7 +3,7 @@
 import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { startGame } from "@/lib/client/game-service";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LeaderboardProps {
   title: string;
@@ -68,6 +68,15 @@ export default function Home() {
   const router = useRouter()
   const [name, setName] = useState('');
   const [type, setType] = useState('kid');
+
+  useEffect(() => {
+    const audio = new Audio('/sounds/main.mp3');
+    audio.play();
+
+    return () => {
+      audio.pause();
+    }
+  }, []);
 
   function start() {
     // initialize game
