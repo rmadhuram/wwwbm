@@ -14,7 +14,6 @@ describe("Leaderboard", () => {
       gameLevel: 1,
       questions: [],
       maxCompletedLevel: 0,
-      totalTime: 0,
       totalHighResTime: 0,
     });
   });

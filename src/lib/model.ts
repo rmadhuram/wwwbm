@@ -14,7 +14,6 @@ export type Game = {
   gameLevel: number;
   questions: Question[];
   maxCompletedLevel: number;
-  totalTime: number;
   totalHighResTime: number;
 };
 
