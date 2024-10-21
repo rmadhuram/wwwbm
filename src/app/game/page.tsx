@@ -7,7 +7,7 @@ import type { Game } from "@/lib/model";
 import { useState } from "react";
 import QuestionDisplay from "./question-display/page";
 import { useRouter } from "next/navigation";
-
+import { playAudio, AUDIO_BG, stopAudio } from "@/lib/client/audio-service";
 let timeoutId: number | null = null;
 let timerValue = 60;
 let startTime: number = 0;
@@ -34,8 +34,6 @@ export default function Game() {
   const [gameState, setGameState] = useState<Game | null>(null);
   const [timer, setTimer] = useState(60);
 
-  const router = useRouter();
-
   /**
    * Initialize the question and start the timer
    */
@@ -48,6 +46,7 @@ export default function Game() {
     timerValue = 60;
     startTime = Date.now();
     setTimer(timerValue);
+    playAudio(AUDIO_BG);  
 
     function tick() {
       timerValue--;
@@ -59,6 +58,31 @@ export default function Game() {
     timeoutId = window.setTimeout(tick, 1000);
   }
 
+  let newGameState: Game | null = null;
+
+  // this is called after a few seconds when the user has answered the question
+  // we move on to the next question
+  function handleQuestionAnswer(correct: boolean) {
+    if (correct && newGameState) {
+      initQuestion(newGameState);
+    }
+  }
+
+  // this is called immediately when the question is answered
+  // we prepare the next game state and keep it ready for the next question
+  function stopTimerCallback(correct: boolean) {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+
+    if (correct && gameState) {
+      gameState.maxCompletedLevel++;
+      let timeTaken = Date.now() - startTime;
+      newGameState = promoteNextLevel(60 - timerValue, timeTaken);
+    }
+  }
+
   useEffect(() => {
     initQuestion(getGame()!);
     return () => {
@@ -66,6 +90,7 @@ export default function Game() {
       if (timeoutId) {
         window.clearTimeout(timeoutId);
       }
+      stopAudio();
     };
   }, []);
 
@@ -83,16 +108,8 @@ export default function Game() {
       <QuestionDisplay
         timer={timer}
         game={gameState}
-        callback={(correct) => {
-          console.log(correct);
-          if (correct) {
-            gameState.maxCompletedLevel++;
-            let timeTaken = Date.now() - startTime;
-            let newGameState = promoteNextLevel(60 - timerValue, timeTaken);
-            console.log("newGameState", newGameState);
-            initQuestion(newGameState);
-          }
-        }}
+        callback={handleQuestionAnswer}
+        stopTimerCallback={stopTimerCallback}
       />
     </div>
   );

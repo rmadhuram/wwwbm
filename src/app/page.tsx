@@ -7,7 +7,7 @@ import { QuestionBase } from "@/lib/model";
 import { setQuestions } from "@/lib/client/question-service";
 
 export default function Init() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const router = useRouter();
   useEffect(() => {

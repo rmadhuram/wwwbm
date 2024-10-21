@@ -2,9 +2,10 @@
 
 import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
-import { startGame } from "@/lib/client/game-service";
+import { addToLeaderBoard, startGame } from "@/lib/client/game-service";
 import { useState, useEffect } from "react";
-import { LeaderBoardEntry, LeaderBoards } from "@/lib/model";
+import { Game, LeaderBoardEntry, LeaderBoards } from "@/lib/model";
+import { playAudio, stopAudio, AUDIO_MAIN } from "@/lib/client/audio-service";
 
 interface LeaderboardProps {
   title: string;
@@ -12,6 +13,17 @@ interface LeaderboardProps {
 }
 
 function Leaderboard({ title, leaderboard }: LeaderboardProps) {
+  function formatTime(time: number) {
+    return Math.round(time / 100) / 10;
+  } 
+
+  function getMedal(index: number) {
+    if (index === 0) return "🥇";
+    if (index === 1) return "🥈";
+    if (index === 2) return "🥉";
+    return "";
+  }
+
   return (
     <div className="leaderboard">
       <div className="leaderboard-title">{title}</div>
@@ -19,7 +31,7 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
         <thead>
           <tr>
             <th className="rank">Rank</th>
-            <th>Name</th>
+            <th className="name">Name</th>
             <th className="num-correct">Levels</th>
             <th className="total-seconds">Time</th>
           </tr>
@@ -27,14 +39,14 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
         <tbody>
           {leaderboard.map((item, index) => (
             <tr key={index}>
-              <td className="rank">{index + 1}</td>
+              <td className="rank"><span className="medal">{getMedal(index)}</span> <span className="rank-number">{index > 2 ? index + 1 : ""}</span></td>
               <td className="name">{item.name}</td>
               <td className="num-correct">
                 {item.completedLevels === 0
                   ? 0
-                  : Number(item.completedLevels) + 1}
+                  : Number(item.completedLevels)}
               </td>
-              <td className="total-seconds">{Math.round(item.time)}</td>
+              <td className="total-seconds">{formatTime(item.time)}</td>
             </tr>
           ))}
         </tbody>
@@ -49,12 +61,65 @@ export default function Home() {
   const [type, setType] = useState("");
   const [leaderboard, setLeaderBoard] = useState<LeaderBoards | null>(null);
 
+  const fetchLeaderBoard = async () => {
+    try {
+      const response = await fetch("/api/leaderboard");
+      if (!response.ok) {
+        throw new Error(`Error : ${response.status}`);
+      }
+
+      const fetchedLeaderBoard: LeaderBoards = await response.json();
+      setLeaderBoard(fetchedLeaderBoard);
+
+      /*
+
+      addToLeaderBoard(fetchedLeaderBoard, {
+        id: "1",
+        playerName: "test",
+        playerLevel: "kid",
+        questions: [],
+        gameLevel: 1,
+        maxCompletedLevel: 1,
+        totalTime: 0,
+        totalHighResTime: 7.281,
+      });
+
+      addToLeaderBoard(fetchedLeaderBoard, {
+        id: "1",
+        playerName: "test",
+        playerLevel: "kid",
+        questions: [],
+        gameLevel: 1,
+        maxCompletedLevel: 3,
+        totalTime: 0,
+        totalHighResTime: 19.281,
+      });
+
+
+      addToLeaderBoard(fetchedLeaderBoard, {
+        id: "1",
+        playerName: "test",
+        playerLevel: "kid",
+        questions: [],
+        gameLevel: 1,
+        maxCompletedLevel: 1,
+        totalTime: 0,
+        totalHighResTime: 21.98,
+      });
+      console.log("fetchedLeaderBoard", fetchedLeaderBoard);
+      */
+
+    } catch (error) {
+      console.log("Error fetching the leaderboard:", error);
+    }
+  };
+
   useEffect(() => {
-    const audio = new Audio('/sounds/main.mp3');
-    audio.play();
+    playAudio(AUDIO_MAIN);
+    fetchLeaderBoard();
 
     return () => {
-      audio.pause();
+      stopAudio();
     }
   }, []);
 
@@ -71,25 +136,6 @@ export default function Home() {
   function handleTypeChange(e: React.ChangeEvent<HTMLInputElement>) {
     setType(e.target.value);
   }
-
-  useEffect(() => {
-    fetchLeaderBoard();
-  }, []);
-
-  const fetchLeaderBoard = async () => {
-    try {
-      const response = await fetch("/api/leaderboard");
-      if (!response.ok) {
-        throw new Error(`Error : ${response.status}`);
-      }
-
-      const fetchedLeaderBoard: LeaderBoards = await response.json();
-
-      setLeaderBoard(fetchedLeaderBoard);
-    } catch (error) {
-      console.log("Error fetching the leaderboard:", error);
-    }
-  };
 
   return (
     <div className={styles.home}>

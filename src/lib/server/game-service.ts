@@ -1,10 +1,10 @@
 import path from "path";
 import fs from "fs";
-import { INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
+import { Game, INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
 
 const leaderboardPath = path.join(process.cwd(), "data", "leaderboard.json");
 
-export function fetchLeaderBoard(): LeaderBoards {
+export function fetchLeaderBoards(): LeaderBoards {
   try {
     const data = fs.readFileSync(leaderboardPath, "utf-8");
     return JSON.parse(data) as LeaderBoards;
@@ -13,6 +13,6 @@ export function fetchLeaderBoard(): LeaderBoards {
   }
 }
 
-export function saveLeaderBoard(leaderboard: LeaderBoards) {
+export function saveLeaderBoards(leaderboard: LeaderBoards) {
   fs.writeFileSync(leaderboardPath, JSON.stringify(leaderboard, null, 2));
 }
