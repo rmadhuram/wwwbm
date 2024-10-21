@@ -1,4 +1,4 @@
-import { Game } from "../model";
+import { Game, LeaderBoards } from "../model";
 import { v4 as uuidv4 } from "uuid";
 import { getQuestions } from "./question-service";
 
@@ -13,7 +13,6 @@ export function startGame(name: string, type: "kid" | "adult") {
     questions: questions,
     gameLevel: 1,
     maxCompletedLevel: 0,
-    totalTime: 0,
     totalHighResTime: 0,
   };
 
@@ -41,4 +40,25 @@ export function getGame() {
 
 export function endGame() {
   currentGame = null;
+}
+
+export function addToLeaderBoard(leaderboards: LeaderBoards, gameState: Game) {
+  let leaderBoard = leaderboards[gameState.playerLevel];
+  leaderBoard.push({
+    name: gameState.playerName,
+    completedLevels: gameState.maxCompletedLevel,
+    time: gameState.totalHighResTime,
+  });
+
+  leaderBoard.sort((a, b) => {
+    if (a.name === "---") return 1;
+    if (b.name === "---") return -1;
+
+    if (a.completedLevels > b.completedLevels) return -1;
+    if (a.completedLevels < b.completedLevels) return 1;
+
+    return a.time - b.time;
+  });
+
+  leaderboards[gameState.playerLevel] = leaderBoard.slice(0, 5);
 }

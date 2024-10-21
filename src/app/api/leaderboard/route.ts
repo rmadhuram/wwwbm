@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { LeaderBoards } from "@/lib/model";
-import { fetchLeaderBoard, saveLeaderBoard } from "@/lib/server/game-service";
+import { fetchLeaderBoards, saveLeaderBoards } from "@/lib/server/game-service";
 
 export async function GET(request: Request) {
   try {
-    const leaderboard = fetchLeaderBoard();
+    const leaderboard = fetchLeaderBoards();
     return NextResponse.json(leaderboard, { status: 200 });
   } catch (error) {
     console.log("Error updating: ", error);
@@ -13,9 +13,16 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const leaderboards = await request.json();
+  saveLeaderBoards(leaderboards);
+  return NextResponse.json(leaderboards, { status: 200 });
+}
+
+/*
+export async function POST1(request: Request) {
   const { name, completedLevels, time, level } = await request.json();
 
-  const leaderboard = fetchLeaderBoard();
+  const leaderboard = fetchLeaderBoards();
   console.log(typeof leaderboard, typeof level);
 
   if (!(level in leaderboard)) {
@@ -33,3 +40,5 @@ export async function POST(request: Request) {
   saveLeaderBoard(updatedLeaderboard);
   return NextResponse.json(leaderboard, { status: 200 });
 }
+
+*/

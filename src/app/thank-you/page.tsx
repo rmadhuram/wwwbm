@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import styles from "./thank-you.module.scss";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { addToLeaderBoard, getGame } from "@/lib/client/game-service";
+import { LeaderBoards } from "@/lib/model";
 
 export default function ThankYou() {
   const searchParams = useSearchParams();
@@ -23,6 +25,19 @@ export default function ThankYou() {
   }, []);
 
   const updateLeaderBoard = async () => {
+    const response = await fetch("/api/leaderboard");
+    if (!response.ok) {
+      throw new Error(`Error : ${response.status}`);
+    }
+
+    const leaderboards: LeaderBoards = await response.json();
+
+    const game = getGame();
+    if (!game) return;
+
+    addToLeaderBoard(leaderboards, game);
+
+    console.log("game", game);
     if (completedLevels === "0") {
       setTimeout(() => {
         router.push("/home");
@@ -33,7 +48,7 @@ export default function ThankYou() {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ name, completedLevels, time, level }),
+        body: JSON.stringify(leaderboards),
       });
     }
   };
