@@ -3,16 +3,12 @@
 import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { startGame } from "@/lib/client/game-service";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { LeaderBoardEntry, LeaderBoards } from "@/lib/model";
 
 interface LeaderboardProps {
   title: string;
-  leaderboard: {
-    name: string;
-    numCorrect: number;
-    totalSeconds: number;
-  }[];
+  leaderboard: LeaderBoardEntry[];
 }
 
 function Leaderboard({ title, leaderboard }: LeaderboardProps) {
@@ -33,8 +29,8 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
             <tr key={index}>
               <td className="rank">{index + 1}</td>
               <td className="name">{item.name}</td>
-              <td className="num-correct">{item.numCorrect}</td>
-              <td className="total-seconds">{Math.round(item.totalSeconds)}</td>
+              <td className="num-correct">{item.completedLevels}</td>
+              <td className="total-seconds">{Math.round(item.time)}</td>
             </tr>
           ))}
         </tbody>
@@ -47,13 +43,10 @@ export default function Home() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [type, setType] = useState("");
-  const [leaderboard, setLeaderBoard] = useState<{
-    kids: LeaderboardProps;
-    adults: LeaderboardProps;
-  } | null>(null);
+  const [leaderboard, setLeaderBoard] = useState<LeaderBoards | null>(null);
 
   function start() {
-    // initialize game
+    // Initialize game
     startGame(name, type as "kid" | "adult");
     router.push("/game");
   }
@@ -77,29 +70,11 @@ export default function Home() {
         throw new Error(`Error : ${response.status}`);
       }
 
-      const fetchedLeaderBoard = await response.json();
+      const fetchedLeaderBoard: LeaderBoards = await response.json();
 
-      const kidsLeaderboard: LeaderboardProps = {
-        title: "KIDS",
-        leaderboard: fetchedLeaderBoard.kid.map((entry: any) => ({
-          name: entry.name,
-          numCorrect: entry.completedLevels,
-          totalSeconds: entry.time,
-        })),
-      };
-
-      const adultsLeaderboard: LeaderboardProps = {
-        title: "ADULTS",
-        leaderboard: fetchedLeaderBoard.adult.map((entry: any) => ({
-          name: entry.name,
-          numCorrect: entry.completedLevels,
-          totalSeconds: entry.time,
-        })),
-      };
-
-      setLeaderBoard({ kids: kidsLeaderboard, adults: adultsLeaderboard });
+      setLeaderBoard(fetchedLeaderBoard);
     } catch (error) {
-      console.log("Error fetching the leader: error");
+      console.log("Error fetching the leaderboard:", error);
     }
   };
 
@@ -116,16 +91,10 @@ export default function Home() {
       </div>
       <div className="leaderboard-container">
         <div className="kids-leaderboard">
-          <Leaderboard
-            title={leaderboard?.kids.title || "KIDS"}
-            leaderboard={leaderboard?.kids.leaderboard || []}
-          />
+          <Leaderboard title="KIDS" leaderboard={leaderboard?.kid || []} />
         </div>
         <div className="adults-leaderboard">
-          <Leaderboard
-            title={leaderboard?.adults.title || "ADULTS"}
-            leaderboard={leaderboard?.adults.leaderboard || []}
-          />
+          <Leaderboard title="ADULTS" leaderboard={leaderboard?.adult || []} />
         </div>
       </div>
       <div className="start-game-container">
