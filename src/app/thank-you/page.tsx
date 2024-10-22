@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import styles from "./thank-you.module.scss";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -8,13 +7,6 @@ import { addToLeaderBoard, getGame } from "@/lib/client/game-service";
 import { LeaderBoards } from "@/lib/model";
 
 export default function ThankYou() {
-  const searchParams = useSearchParams();
-
-  const name = searchParams.get("name");
-  const completedLevels = searchParams.get("completedLevels");
-  const time = searchParams.get("time");
-  const level = searchParams.get("level");
-
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +30,7 @@ export default function ThankYou() {
     addToLeaderBoard(leaderboards, game);
 
     console.log("game", game);
-    if (completedLevels === "0") {
+    if (game.maxCompletedLevel === 0) {
       setTimeout(() => {
         router.push("/home");
       }, 3000);
