@@ -7,7 +7,7 @@ export type Question = {
   fact?: string;
 };
 
-export type Game = {
+export type GameState = {
   id: string;
   playerName: string;
   playerLevel: "kid" | "adult";
@@ -50,3 +50,5 @@ export const INITIAL_LEADERBOARD: LeaderBoards = {
     { name: "---", completedLevels: 0, time: 0 },
   ],
 };
+
+export type AnswerState = 'correct' | 'wrong' | 'timeout' | null;

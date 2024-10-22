@@ -1,12 +1,12 @@
-import { Game, LeaderBoards } from "../model";
+import { GameState, LeaderBoards } from "../model";
 import { v4 as uuidv4 } from "uuid";
 import { getQuestions } from "./question-service";
 
-let currentGame: Game | null = null;
+let currentGame: GameState | null = null;
 
 export function startGame(name: string, type: "kid" | "adult") {
   const questions = getQuestions(type);
-  const game: Game = {
+  const game: GameState = {
     id: uuidv4(),
     playerName: name,
     playerLevel: type,
@@ -22,7 +22,7 @@ export function startGame(name: string, type: "kid" | "adult") {
 /**
  * Clone the current game and promote to the next level
  */
-export function promoteNextLevel(timeTaken: number, highResTime: number): Game {
+export function promoteNextLevel(timeTaken: number, highResTime: number): GameState {
   if (!currentGame) {
     throw new Error("No game started");
   }
@@ -42,7 +42,7 @@ export function endGame() {
   currentGame = null;
 }
 
-export function addToLeaderBoard(leaderboards: LeaderBoards, gameState: Game) {
+export function addToLeaderBoard(leaderboards: LeaderBoards, gameState: GameState) {
   let leaderBoard = leaderboards[gameState.playerLevel];
   leaderBoard.push({
     name: gameState.playerName,
