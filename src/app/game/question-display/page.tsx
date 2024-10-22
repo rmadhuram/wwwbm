@@ -2,7 +2,11 @@ import styles from "./question-display.module.scss";
 import { Game } from "../../../lib/model";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { playAudio, AUDIO_CORRECT, AUDIO_WRONG } from "@/lib/client/audio-service";
+import {
+  playAudio,
+  AUDIO_CORRECT,
+  AUDIO_WRONG,
+} from "@/lib/client/audio-service";
 export default function QuestionDisplay({
   timer,
   game,
@@ -44,10 +48,14 @@ export default function QuestionDisplay({
     setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.correct);
 
+    const image = isCorrect ? "wwbbm-correct.png" : "wwbbm-wrong.png";
+
     if (isCorrect) {
       playAudio(AUDIO_CORRECT);
+      router.push(`/fact?correct=${isCorrect}&image=${image}`);
     } else {
       playAudio(AUDIO_WRONG);
+      router.push(`/fact?correct=${isCorrect}&image=${image}`);
     }
 
     setIsLocked(true);
@@ -64,13 +72,19 @@ export default function QuestionDisplay({
         game.maxCompletedLevel = game.gameLevel;
       }
 
-      if (!isCorrect || game.gameLevel === 5) {
+      // if (!isCorrect || game.gameLevel === 5) {
+      //   router.push(
+      //     `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
+      //   );
+      // }
+
+      console.log(game.gameLevel);
+      if (game.gameLevel === 5) {
         router.push(
           `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
         );
       }
     }, 4000);
-
   };
 
   const assignClassName = (index: number) => {

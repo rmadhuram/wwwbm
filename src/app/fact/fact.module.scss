@@ -1,0 +1,19 @@
+.fact {
+  img {
+    position: relative;
+  }
+  button {
+    position: absolute;
+    z-index: 999;
+    float: inline-start;
+    width: 200px;
+    font-family: "Copperplate Gothic Std 29 BC";
+    font-size: 2rem;
+    padding: 5px 20px;
+    background-color: #4caba5;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
