@@ -27,15 +27,8 @@ export default function QuestionDisplay({
 
   const router = useRouter();
 
-  const name = game.playerName;
-  const completedLevels = game.maxCompletedLevel;
-  const time = game.totalHighResTime / 1000;
-  const level = game.playerLevel;
-
   if (timer === 0) {
-    router.push(
-      `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
-    );
+    router.push("/thank-you");
   }
 
   const handleAnswer = (index: number) => {
@@ -80,9 +73,7 @@ export default function QuestionDisplay({
 
       console.log(game.gameLevel);
       if (game.gameLevel === 5) {
-        router.push(
-          `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
-        );
+        router.push("/thank-you");
       }
     }, 4000);
   };
