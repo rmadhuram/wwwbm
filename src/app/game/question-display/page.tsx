@@ -1,5 +1,5 @@
 import styles from "./question-display.module.scss";
-import { Game } from "../../../lib/model";
+import { GameState } from "../../../lib/model";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -7,6 +7,15 @@ import {
   AUDIO_CORRECT,
   AUDIO_WRONG,
 } from "@/lib/client/audio-service";
+
+/**
+ * QuestionDisplay component
+ * @param timer - the timer
+ * @param game - the game state
+ * @param callback - the callback function to call after playing the audio for selection.
+ * @param stopTimerCallback - the callback function to call when the answer is selected
+ * @returns
+ */
 export default function QuestionDisplay({
   timer,
   game,
@@ -14,7 +23,7 @@ export default function QuestionDisplay({
   stopTimerCallback,
 }: {
   timer: number;
-  game: Game;
+  game: GameState;
   callback: (correct: boolean) => void;
   stopTimerCallback: (correct: boolean) => void;
 }) {
@@ -24,12 +33,7 @@ export default function QuestionDisplay({
 
   // this is to prevent the user from selecting another option after the answer is locked
   const [isLocked, setIsLocked] = useState(false);
-
   const router = useRouter();
-
-  if (timer === 0) {
-    router.push("/thank-you");
-  }
 
   const handleAnswer = (index: number) => {
     if (isLocked) {
@@ -40,15 +44,10 @@ export default function QuestionDisplay({
     stopTimerCallback(isCorrect);
     setSelectedAnswer(index);
     setCorrectAnswer(currentQuestion.correct);
+    playAudio(isCorrect ? AUDIO_CORRECT : AUDIO_WRONG);
 
-    const image = isCorrect ? "wwbbm-correct.png" : "wwbbm-wrong.png";
-
-    if (isCorrect) {
-      playAudio(AUDIO_CORRECT);
-      router.push(`/fact?correct=${isCorrect}&image=${image}`);
-    } else {
-      playAudio(AUDIO_WRONG);
-      router.push(`/fact?correct=${isCorrect}&image=${image}`);
+    if (isCorrect && game.gameLevel === 5) {
+      game.maxCompletedLevel = game.gameLevel;
     }
 
     setIsLocked(true);
@@ -56,25 +55,7 @@ export default function QuestionDisplay({
       setIsLocked(false);
       setSelectedAnswer(null);
       setCorrectAnswer(null);
-      if (game.gameLevel < 5) {
-        // if the level is less than 5, we need to call the callback to advance to the next level
-        callback(isCorrect);
-      }
-
-      if (isCorrect && game.gameLevel === 5) {
-        game.maxCompletedLevel = game.gameLevel;
-      }
-
-      // if (!isCorrect || game.gameLevel === 5) {
-      //   router.push(
-      //     `/thank-you?name=${name}&completedLevels=${completedLevels}&time=${time}&level=${level}`
-      //   );
-      // }
-
-      console.log(game.gameLevel);
-      if (game.gameLevel === 5) {
-        router.push("/thank-you");
-      }
+      callback(isCorrect);
     }, 4000);
   };
 

@@ -3,16 +3,18 @@
 import styles from "./game.module.scss";
 import { useEffect } from "react";
 import { getGame, promoteNextLevel } from "@/lib/client/game-service";
-import type { Game } from "@/lib/model";
+import { GameState, AnswerState } from "@/lib/model";
 import { useState } from "react";
 import QuestionDisplay from "./question-display/page";
 import { useRouter } from "next/navigation";
 import { playAudio, AUDIO_BG, stopAudio } from "@/lib/client/audio-service";
+import Fact from "./fact/page";
+
 let timeoutId: number | null = null;
 let timerValue = 60;
 let startTime: number = 0;
 
-function Title({ game, timer }: { game: Game | null; timer: number }) {
+function Title({ game, timer }: { game: GameState | null; timer: number }) {
   return (
     <div className="title">
       <img className="logo" src="/wwbam.png" alt="wwbam" />
@@ -29,15 +31,18 @@ function Title({ game, timer }: { game: Game | null; timer: number }) {
     </div>
   );
 }
+let newGameState: GameState | null = null;
 
 export default function Game() {
-  const [gameState, setGameState] = useState<Game | null>(null);
+  const [gameState, setGameState] = useState<GameState | null>(null);
   const [timer, setTimer] = useState(60);
-
+  const [showingFact, setShowingFact] = useState(false);
+  const [answerState, setAnswerState] = useState<AnswerState>(null); 
+  const router = useRouter();
   /**
    * Initialize the question and start the timer
    */
-  function initQuestion(gs: Game) {
+  function initQuestion(gs: GameState) {
     if (timeoutId) {
       window.clearTimeout(timeoutId);
       timeoutId = null;
@@ -53,17 +58,32 @@ export default function Game() {
       setTimer(timerValue);
       if (timerValue > 0) {
         timeoutId = window.setTimeout(tick, 1000);
+      } else {
+        setAnswerState('timeout');
+        setShowingFact(true);
       }
     }
     timeoutId = window.setTimeout(tick, 1000);
   }
 
-  let newGameState: Game | null = null;
-
   // this is called after a few seconds when the user has answered the question
   // we move on to the next question
   function handleQuestionAnswer(correct: boolean) {
-    if (correct && newGameState) {
+    stopAudio();
+    setAnswerState(correct ? 'correct' : 'wrong');
+    setShowingFact(true);
+  }
+
+  function handleFactNext() {
+    console.log('answer state', answerState);
+    if (answerState === 'wrong' || answerState === 'timeout') {
+      // we don't move on to the next question
+      router.push('/thank-you');
+      return;
+    }
+
+    setShowingFact(false);
+    if (newGameState) {
       initQuestion(newGameState);
     }
   }
@@ -98,6 +118,14 @@ export default function Game() {
     return (
       <div className={styles.game}>
         <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (showingFact) {
+    return (
+      <div className={styles.game}>
+        <Fact gameState={gameState} answerState={answerState} nextCallback={handleFactNext}  />
       </div>
     );
   }

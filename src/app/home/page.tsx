@@ -4,7 +4,7 @@ import styles from "./home.module.scss";
 import { useRouter } from "next/navigation";
 import { addToLeaderBoard, startGame } from "@/lib/client/game-service";
 import { useState, useEffect } from "react";
-import { Game, LeaderBoardEntry, LeaderBoards } from "@/lib/model";
+import { GameState, LeaderBoardEntry, LeaderBoards } from "@/lib/model";
 import { playAudio, stopAudio, AUDIO_MAIN } from "@/lib/client/audio-service";
 
 interface LeaderboardProps {

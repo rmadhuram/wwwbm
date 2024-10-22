@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { Game, INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
+import { GameState, INITIAL_LEADERBOARD, LeaderBoards } from "@/lib/model";
 
 const leaderboardPath = path.join(process.cwd(), "data", "leaderboard.json");
 
