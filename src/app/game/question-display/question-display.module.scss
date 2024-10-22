@@ -40,11 +40,6 @@
       align-items: center;
       justify-content: center;
 
-      &:hover {
-        background-color: #2d417c;
-        cursor: pointer;
-      }
-
       &.correct {
         background-color: green;
       }
@@ -55,6 +50,11 @@
 
       &.default {
         background-color: #13106d;
+
+        &:hover {
+          background-color: #2d417c;
+          cursor: pointer;
+        }
       }
     }
   }
