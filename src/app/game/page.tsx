@@ -59,6 +59,7 @@ export default function Game() {
       if (timerValue > 0) {
         timeoutId = window.setTimeout(tick, 1000);
       } else {
+        stopAudio();
         setAnswerState('timeout');
         setShowingFact(true);
       }
@@ -76,7 +77,8 @@ export default function Game() {
 
   function handleFactNext() {
     console.log('answer state', answerState);
-    if (answerState === 'wrong' || answerState === 'timeout') {
+  
+    if (answerState === 'wrong' || answerState === 'timeout' || gameState?.gameLevel === 5) {
       // we don't move on to the next question
       router.push('/thank-you');
       return;

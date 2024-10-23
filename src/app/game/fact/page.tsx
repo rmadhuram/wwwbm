@@ -6,9 +6,15 @@ export default function Fact({ gameState, nextCallback, answerState }: { gameSta
 
   return (
     <div className={styles["fact"]}>
-      <p>answer: {answerState}</p>
-      <p>{gameState.questions[gameState.gameLevel - 1].question}</p>
-      <button onClick={nextCallback}>Next</button>
+      <div className={`fact-container ${answerState}`}>  
+        <div className="reference">
+          {gameState.questions[gameState.gameLevel - 1].reference}
+        </div>
+        <div className="fact-text">
+          {gameState.questions[gameState.gameLevel - 1].fact}
+        </div>
+        <button onClick={nextCallback}>Next</button>
+      </div>
     </div>
   );
 }

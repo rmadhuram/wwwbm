@@ -16,6 +16,35 @@
 
   h3 {
     font-size: 2rem;
+    color: #e4debc;
+  }
+
+  table {
+    font-size: 2rem;
+
+    td {
+      background-color: #13524d;
+      padding: 10px 20px;
+    }
+
+    .value {
+      font-weight: bold;
+      text-align: right;
+      padding-left: 40px;
+    }
+  }
+
+  button {
+    position: relative;
+    top: 100px;
+    width: 250px;
+    font-size: 2rem;
+    padding: 10px 20px;
+    background-color: #4caba5;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
   }
 }
 

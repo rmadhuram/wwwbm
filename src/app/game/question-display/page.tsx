@@ -33,9 +33,8 @@ export default function QuestionDisplay({
 
   // this is to prevent the user from selecting another option after the answer is locked
   const [isLocked, setIsLocked] = useState(false);
-  const router = useRouter();
 
-  const handleAnswer = (index: number) => {
+  const handleSelection = (index: number) => {
     if (isLocked) {
       return;
     }
@@ -79,7 +78,7 @@ export default function QuestionDisplay({
           <div
             className={`answer ${assignClassName(index)}`}
             key={index}
-            onClick={() => handleAnswer(index)}
+            onClick={() => handleSelection(index)}
           >
             <p>
               {String.fromCharCode(65 + index)}: {option}
