@@ -49,12 +49,12 @@ function shuffleOptions(options: string[], correctAnswer: string) {
   };
 }
 
-async function loadQuestions(fileName: string) {
+async function loadQuestions(fileName: string): Promise<Question[][]> {
   const filePath = path.join(dataDir, fileName);
   console.log(`Loading questions from ${filePath}`);
 
   return new Promise((resolve, reject) => {
-    const results: any[] = [];
+    const results: Question[][] = [[],[],[],[],[]];
     fs.createReadStream(filePath)
       .pipe(csv())
       .on("data", (row) => {
@@ -64,21 +64,22 @@ async function loadQuestions(fileName: string) {
           options,
           row.option0
         );
-
-        results.push({
+        
+        results[row.level-1].push({
+          id: '',
           question: row.question,
           options: shuffledOptions,
           correct: correctAnswerIndex,
           reference: row.reference,
-          fact: row.fact,
+          fact: row.fact
         });
       })
-      .on("end", () => resolve([results]))
+      .on("end", () => resolve(results))
       .on("error", (error) => reject(error));
   });
 }
 
-export async function loadQuestionsFromCSV(): Promise<any> {
+export async function loadQuestionsFromCSV(): Promise<QuestionBase> {
   if (!fs.existsSync(dataDir)) {
     throw new Error(`Data directory ${dataDir} does not exist`);
   }
@@ -86,6 +87,9 @@ export async function loadQuestionsFromCSV(): Promise<any> {
   try {
     const kidsQuestions = await loadQuestions("q-kids.csv");
     const adultQuestions = await loadQuestions("q_adults.csv");
+
+    kidsQuestions.forEach(level => level.sort(() => Math.random() - 0.5));
+    adultQuestions.forEach(level => level.sort(() => Math.random() - 0.5));
 
     let questions = { kidsQuestions, adultQuestions };
     return questions;
