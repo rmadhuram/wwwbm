@@ -11,7 +11,8 @@ import { playAudio, AUDIO_BG, stopAudio } from "@/lib/client/audio-service";
 import Fact from "./fact/page";
 
 let timeoutId: number | null = null;
-let timerValue = 60;
+// let timerValue = 60;
+let timerValue: number;
 let startTime: number = 0;
 
 function Title({ game, timer }: { game: GameState | null; timer: number }) {
@@ -35,9 +36,9 @@ let newGameState: GameState | null = null;
 
 export default function Game() {
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(0);
   const [showingFact, setShowingFact] = useState(false);
-  const [answerState, setAnswerState] = useState<AnswerState>(null); 
+  const [answerState, setAnswerState] = useState<AnswerState>(null);
   const router = useRouter();
   /**
    * Initialize the question and start the timer
@@ -48,10 +49,10 @@ export default function Game() {
       timeoutId = null;
     }
     setGameState(gs);
-    timerValue = 60;
+    gs.playerLevel === "kid" ? (timerValue = 60) : (timerValue = 30);
     startTime = Date.now();
     setTimer(timerValue);
-    playAudio(AUDIO_BG);  
+    playAudio(AUDIO_BG);
 
     function tick() {
       timerValue--;
@@ -60,7 +61,7 @@ export default function Game() {
         timeoutId = window.setTimeout(tick, 1000);
       } else {
         stopAudio();
-        setAnswerState('timeout');
+        setAnswerState("timeout");
         setShowingFact(true);
       }
     }
@@ -71,16 +72,20 @@ export default function Game() {
   // we move on to the next question
   function handleQuestionAnswer(correct: boolean) {
     stopAudio();
-    setAnswerState(correct ? 'correct' : 'wrong');
+    setAnswerState(correct ? "correct" : "wrong");
     setShowingFact(true);
   }
 
   function handleFactNext() {
-    console.log('answer state', answerState);
-  
-    if (answerState === 'wrong' || answerState === 'timeout' || gameState?.gameLevel === 5) {
+    console.log("answer state", answerState);
+
+    if (
+      answerState === "wrong" ||
+      answerState === "timeout" ||
+      gameState?.gameLevel === 5
+    ) {
       // we don't move on to the next question
-      router.push('/thank-you');
+      router.push("/thank-you");
       return;
     }
 
@@ -127,7 +132,11 @@ export default function Game() {
   if (showingFact) {
     return (
       <div className={styles.game}>
-        <Fact gameState={gameState} answerState={answerState} nextCallback={handleFactNext}  />
+        <Fact
+          gameState={gameState}
+          answerState={answerState}
+          nextCallback={handleFactNext}
+        />
       </div>
     );
   }
