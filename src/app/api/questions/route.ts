@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getQuestions } from '@/lib/server/question-service';
+import { loadQuestionsFromCSV } from '@/lib/server/question-service';
 
 export async function GET(request: Request) {
-  const questions = getQuestions();
+  const questions = await loadQuestionsFromCSV();
   return NextResponse.json(questions);
 }
