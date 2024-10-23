@@ -9,6 +9,8 @@ import { setQuestions } from "@/lib/client/question-service";
 export default function Init() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [questionBase, setQuestionBase] = useState<QuestionBase>();
+
   const router = useRouter();
   useEffect(() => {
     const init = async () => {
@@ -19,6 +21,7 @@ export default function Init() {
         if (data.ok) {
           let questions: QuestionBase = await data.json();
           setQuestions(questions);
+          setQuestionBase(questions);
         } else {
           console.error("Failed to initialize");
           setError(true);
@@ -45,7 +48,38 @@ export default function Init() {
       ) : loading ? (
         <h3>Initializing...</h3>
       ) : (
-        <button onClick={goToHome}>Start</button>
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Level 1</th>
+                <th>Level 2</th>
+                <th>Level 3</th>
+                <th>Level 4</th>
+                <th>Level 5</th>
+                <th>Total</th>
+              </tr>   
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kids</td>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <td key={i}>{questionBase?.kidsQuestions[i].length}</td>
+                ))}
+                <td>{questionBase?.kidsQuestions.reduce((acc, curr) => acc + curr.length, 0)}</td>
+              </tr>
+              <tr>
+                <td>Adults</td>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <td key={i}>{questionBase?.adultQuestions[i].length}</td>
+                ))}
+                <td>{questionBase?.adultQuestions.reduce((acc, curr) => acc + curr.length, 0)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button onClick={goToHome}>Start</button>
+        </>
       )}
     </div>
   );
