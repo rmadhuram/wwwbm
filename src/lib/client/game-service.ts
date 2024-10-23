@@ -42,6 +42,11 @@ export function endGame() {
   currentGame = null;
 }
 
+/**
+ * Add to leaderboard in-place.
+ * @param leaderboards 
+ * @param gameState 
+ */
 export function addToLeaderBoard(leaderboards: LeaderBoards, gameState: GameState) {
   let leaderBoard = leaderboards[gameState.playerLevel];
   leaderBoard.push({

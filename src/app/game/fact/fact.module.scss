@@ -1,20 +1,61 @@
-.fact {
-  img {
-    position: relative;
-  }
-  
-  button {
-    position: absolute;
-    z-index: 999;
-    float: inline-start;
-    width: 200px;
+.fact :global { 
+  .fact-container {
+    display: flex;
+    flex-direction: column;
+    width: 1920px;
+    height: 1080px;
     font-family: "Copperplate Gothic Std 29 BC";
-    font-size: 2rem;
-    padding: 5px 20px;
-    background-color: #4caba5;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+    align-items: center;
+  
+    &.wrong {
+      background-image: url('/wwbbm-wrong.png');
+    }
+
+    &.correct {
+      background-image: url('/wwbbm-correct.png');
+    }
+
+    &.timeout {
+      background-image: url('/wwbbm-timeout.png');
+    }
+
+    .reference {
+      position: absolute;
+      width: 1200px;
+      height: 120px;
+      top: 330px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      color: white;
+    }
+
+    .fact-text {
+      position: absolute;
+      width: 1200px;
+      height: 300px;
+      top: 540px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      color: white;
+    }
+
+    button {
+      position: relative;
+      top: 950px;
+      z-index: 999;
+      float: inline-start;
+      width: 250px;
+      font-size: 2.5rem;
+      padding: 10px 20px;
+      background-color: #4caba5;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
   }
 }

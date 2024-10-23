@@ -8,13 +8,7 @@ import { LeaderBoards } from "@/lib/model";
 
 export default function ThankYou() {
   const router = useRouter();
-
-  useEffect(() => {
-    updateLeaderBoard();
-    setTimeout(() => {
-      router.push("/home");
-    }, 3000);
-  }, []);
+  const game = getGame();
 
   const updateLeaderBoard = async () => {
     const response = await fetch("/api/leaderboard");
@@ -23,32 +17,47 @@ export default function ThankYou() {
     }
 
     const leaderboards: LeaderBoards = await response.json();
+    if (game) {
+      addToLeaderBoard(leaderboards, game);
 
-    const game = getGame();
-    if (!game) return;
-
-    addToLeaderBoard(leaderboards, game);
-
-    console.log("game", game);
-    if (game.maxCompletedLevel === 0) {
-      setTimeout(() => {
-        router.push("/home");
-      }, 3000);
-    } else {
-      const response = await fetch("/api/leaderboard", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(leaderboards),
-      });
+      // write to file.
+      if (game.maxCompletedLevel > 0) {
+        const response = await fetch("/api/leaderboard", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(leaderboards),
+        });
+      }
     }
   };
+
+  useEffect(() => {
+    updateLeaderBoard();
+  }, []);
+
+  function formatTime(time: number) {
+    return Math.round(time / 100) / 10;
+  } 
 
   return (
     <div className={styles["thank-you"]}>
       <h1>Thank you</h1>
-      <h3>Your score will be emailed to you shortly</h3>
+      <h3>{game?.playerName}</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td>Levels cleared</td>
+            <td className="value">{game?.maxCompletedLevel}</td>
+          </tr>
+          <tr>
+            <td>Time taken</td>
+            <td className="value">{formatTime(game?.totalHighResTime ?? 0)} seconds</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onClick={() => router.push("/home")}>Finish</button>
     </div>
   );
 }
