@@ -11,6 +11,7 @@
     "test": "mocha 'src/test/**/*.ts' --require ts-node/register --recursive  --timeout 60000 --exit"
   },
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "next": "14.2.15",
     "react": "^18",
