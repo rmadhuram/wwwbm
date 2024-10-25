@@ -64,15 +64,20 @@ async function loadQuestions(fileName: string): Promise<Question[][]> {
           options,
           row.option0
         );
-        
-        results[row.level-1].push({
-          id: '',
-          question: row.question,
-          options: shuffledOptions,
-          correct: correctAnswerIndex,
-          reference: row.reference,
-          fact: row.fact
-        });
+
+        try {
+          results[row.level-1].push({
+            id: '',
+            question: row.question,
+            options: shuffledOptions,
+            correct: correctAnswerIndex,
+            reference: row.reference,
+            fact: row.fact
+          });  
+        } catch (error) {
+          console.log(`Error loading question`, row, error);
+        }
+
       })
       .on("end", () => resolve(results))
       .on("error", (error) => reject(error));
@@ -86,7 +91,7 @@ export async function loadQuestionsFromCSV(): Promise<QuestionBase> {
 
   try {
     const kidsQuestions = await loadQuestions("q-kids.csv");
-    const adultQuestions = await loadQuestions("q_adults.csv");
+    const adultQuestions = await loadQuestions("q-adults.csv");
 
     kidsQuestions.forEach(level => level.sort(() => Math.random() - 0.5));
     adultQuestions.forEach(level => level.sort(() => Math.random() - 0.5));
