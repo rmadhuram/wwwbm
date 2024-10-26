@@ -15,6 +15,18 @@ let timeoutId: number | null = null;
 let timerValue: number;
 let startTime: number = 0;
 
+function getProgress(game: GameState): string {
+  let progressStr = "";
+  for (let i = 0; i < game.maxCompletedLevel; i++) {
+    progressStr += "🟢";
+  }
+  progressStr += "🟡";
+  for (let i = game.gameLevel; i < 5; i++) {
+    progressStr += "🔘";
+  }
+  return progressStr;
+}
+
 function Title({ game, timer }: { game: GameState | null; timer: number }) {
   return (
     <div className="title">
@@ -24,7 +36,10 @@ function Title({ game, timer }: { game: GameState | null; timer: number }) {
       </div>
       <div className="name-level">
         <p>{game?.playerName}</p>
-        <p>Level {game?.gameLevel}</p>
+        <div className="level-progress">
+          <span className="progress">{getProgress(game ?? {} as GameState)}</span>
+          <p>Level {game?.gameLevel}</p>
+        </div>
       </div>
       <div className="timer">
         <p>{timer < 10 ? "0" + timer : timer}</p>

@@ -36,6 +36,17 @@
     .name-level {
       font-size: 2.5rem;
       flex-grow: 1;
+
+      .level-progress {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+
+        .progress {
+          letter-spacing: 3px;
+        }
+      }
     }
 
     .timer {
