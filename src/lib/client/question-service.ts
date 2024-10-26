@@ -11,18 +11,7 @@ export function setQuestions(qs: QuestionBase) {
 }
 
 export function getQuestions(level: 'kid' | 'adult'): Question[] {
-  let qb = null;
-  console.log(`level: ${level}`, questionBase)
-  switch (level) {
-    case 'kid':
-      qb = questionBase.kidsQuestions;
-      break;
-    case 'adult':
-      qb = questionBase.adultQuestions;
-      break;
-  }
-
-  console.log(`level: ${level}`, qb)
+  let qb = (level === 'kid') ? questionBase.kidsQuestions : questionBase.adultQuestions;
   let questions = []
   for (let i = 0; i < 5; i++) {
     let question = qb[i][questionPointers[level][i]]; 
