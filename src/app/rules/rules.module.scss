@@ -1,0 +1,23 @@
+.rules :global {
+  display: flex;
+  flex-direction: column;
+  width: 1920px;
+  height: 1080px;
+  background-color: #13106d;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  font-family: "Copperplate Gothic Std 29 BC";
+
+  button {
+    width: 250px;
+    font-size: 2rem;
+    padding: 10px 20px;
+    background-color: #4caba5;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
