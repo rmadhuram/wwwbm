@@ -15,7 +15,7 @@ interface LeaderboardProps {
 function Leaderboard({ title, leaderboard }: LeaderboardProps) {
   function formatTime(time: number) {
     return Math.round(time / 100) / 10;
-  } 
+  }
 
   function getMedal(index: number) {
     if (index === 0) return "🥇";
@@ -39,12 +39,15 @@ function Leaderboard({ title, leaderboard }: LeaderboardProps) {
         <tbody>
           {leaderboard.map((item, index) => (
             <tr key={index}>
-              <td className="rank"><span className="medal">{getMedal(index)}</span> <span className="rank-number">{index > 2 ? index + 1 : ""}</span></td>
+              <td className="rank">
+                <span className="medal">{getMedal(index)}</span>{" "}
+                <span className="rank-number">
+                  {index > 2 ? index + 1 : ""}
+                </span>
+              </td>
               <td className="name">{item.name}</td>
               <td className="num-correct">
-                {item.completedLevels === 0
-                  ? 0
-                  : Number(item.completedLevels)}
+                {item.completedLevels === 0 ? 0 : Number(item.completedLevels)}
               </td>
               <td className="total-seconds">{formatTime(item.time)}</td>
             </tr>
@@ -108,7 +111,6 @@ export default function Home() {
       });
       console.log("fetchedLeaderBoard", fetchedLeaderBoard);
       */
-
     } catch (error) {
       console.log("Error fetching the leaderboard:", error);
     }
@@ -120,13 +122,18 @@ export default function Home() {
 
     return () => {
       stopAudio();
-    }
+    };
   }, []);
 
+  // function start() {
+  //   // Initialize game
+  //   startGame(name, type as "kid" | "adult");
+  //   router.push("/game");
+  // }
+
   function start() {
-    // Initialize game
     startGame(name, type as "kid" | "adult");
-    router.push("/game");
+    router.push("/rules");
   }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
