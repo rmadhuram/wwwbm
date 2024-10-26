@@ -1,14 +1,8 @@
 .rules :global {
-  display: flex;
-  flex-direction: column;
   width: 1920px;
   height: 1080px;
-  background-color: #13106d;
-  color: white;
-  align-items: center;
-  justify-content: center;
-  gap: 50px;
-  font-family: "Copperplate Gothic Std 29 BC";
+  position: relative;
+  background-image: url("/wwbbm-rules-background.png");
 
   button {
     width: 250px;
@@ -19,5 +13,9 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    position: absolute;
+    bottom: 150px;
+    right: 50%;
+    transform: translateX(50%);
   }
 }
