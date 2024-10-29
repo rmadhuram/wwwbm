@@ -1,3 +1,7 @@
+# Who Wants to be a Bible Millionaire?
+
+This is a game in the style of Who Wants to be a Millionaire? but with Bible questions.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
